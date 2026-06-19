@@ -3,11 +3,22 @@ margin: 0;
 padding: 0;
 box-sizing: border-box;
 font-family: 'Poppins', sans-serif;
+transition: all 0.3s ease;
+}
+
+html {
+scroll-behavior: smooth;
 }
 
 body {
 background: linear-gradient(120deg, #fdfbfb, #ebedee);
 overflow-x: hidden;
+animation: pageFade 0.8s ease;
+}
+
+@keyframes pageFade {
+from { opacity: 0; }
+to { opacity: 1; }
 }
 
 .topbar {
@@ -23,19 +34,17 @@ padding: 10px 0;
 animation: scrollLeft 15s linear infinite;
 font-size: 14px;
 }
+
 .scroll-text:hover {
 animation-play-state: paused;
 cursor: pointer;
 }
 
 @keyframes scrollLeft {
-0% {
-transform: translateX(100%);
+0% { transform: translateX(100%); }
+100% { transform: translateX(-100%); }
 }
-100% {
-transform: translateX(-100%);
-}
-}
+
 .navbar {
 display: flex;
 justify-content: space-between;
@@ -46,12 +55,23 @@ flex-wrap: wrap;
 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+.navbar:hover {
+box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
 .navbar h2 {
 font-weight: 700;
 letter-spacing: 2px;
 background: linear-gradient(45deg, #ff6a6a, #000);
 -webkit-background-clip: text;
 color: transparent;
+background-size: 200% auto;
+animation: textShine 3s linear infinite;
+}
+
+@keyframes textShine {
+0% { background-position: 0% center; }
+100% { background-position: 200% center; }
 }
 
 .nav-links {
@@ -82,7 +102,6 @@ transition: 0.3s;
 width: 100%;
 }
 
-
 .contact {
 display: flex;
 align-items: center;
@@ -92,7 +111,6 @@ padding: 6px 14px;
 border-radius: 25px;
 font-size: 14px;
 background: white;
-transition: 0.3s;
 }
 
 .contact:hover {
@@ -133,22 +151,8 @@ animation: fadeUp 1.5s ease-in-out;
 }
 
 @keyframes fadeUp {
-from {opacity: 0; transform: translateY(40px);}
-to {opacity: 1; transform: translateY(0);}
-}
-.hero-content h1 {
-overflow: hidden;
-white-space: nowrap;
-width: 0;
-animation: typing 3s steps(30, end) forwards, blink 0.6s 5;
-}
-
-@keyframes typing {
-to { width: 100%; }
-}
-
-@keyframes blink {
-50% { border-color: transparent; }
+from { opacity: 0; transform: translateY(40px); }
+to { opacity: 1; transform: translateY(0); }
 }
 
 .search-box {
@@ -167,18 +171,13 @@ padding: 5px;
 border: 1px solid rgba(255,255,255,0.3);
 }
 
-.search-box select {
-border: none;
-background: transparent;
-padding: 12px 15px;
-border-radius: 30px;
-outline: none;
-color: white;
-min-width: 120px;
+.search-box:focus-within {
+box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+transform: scale(1.02);
 }
 
+.search-box select,
 .search-box input {
-flex: 1;
 border: none;
 padding: 12px;
 background: transparent;
@@ -198,35 +197,17 @@ border-radius: 30px;
 cursor: pointer;
 color: white;
 font-weight: 500;
-transition: 0.3s;
 }
 
 .search-box button:hover {
 transform: scale(1.05);
 }
+
 .section {
 padding: 60px 20px;
 text-align: center;
 background: #f8d0d0;
 }
-
-.section h2,
-.products h1 {
-font-size: 32px;
-position: relative;
-display: inline-block;
-}
-
-.section h2::after,
-.products h1::after {
-content: "";
-width: 50%;
-height: 3px;
-position: absolute;
-bottom: -5px;
-left: 25%;
-}
-
 
 .cards {
 display: flex;
@@ -241,46 +222,22 @@ background: white;
 padding: 25px;
 border-radius: 12px;
 width: 180px;
-transition: 0.3s;
 box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 cursor: pointer;
-position: relative;
-overflow: hidden;
-}
-
-.card::before {
-content: "";
-position: absolute;
-width: 100%;
-height: 100%;
-background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
-top: 0;
-left: -100%;
-transition: 0.5s;
-}
-
-.card:hover::before {
-left: 100%;
+transform: perspective(1000px);
 }
 
 .card:hover {
+transform: translateY(-10px) rotateX(5deg) scale(1.05);
+box-shadow: 0 10px 30px rgba(255, 100, 100, 0.5);
 background: rgb(230, 163, 163);
 color: white;
-transform: translateY(-10px) scale(1.05);
-}
-.card:hover {
-box-shadow: 0 10px 30px rgba(255, 100, 100, 0.5);
 }
 
 .products {
 background: linear-gradient(120deg, #ffffff, #f7f7f7);
 padding: 70px 20px;
 text-align: center;
-}
-
-.products h1 {
-font-size: 32px;
-margin-bottom: 40px;
 }
 
 .product-grid {
@@ -294,16 +251,42 @@ background: white;
 padding: 20px;
 border-radius: 18px;
 box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-transition: 0.4s;
 cursor: pointer;
 position: relative;
 overflow: hidden;
 text-align: center;
+transform-style: preserve-3d;
+opacity: 0;
+transform: translateY(40px);
+animation: cardReveal 0.8s ease forwards;
+}
+
+.product:nth-child(1) { animation-delay: 0.2s; }
+.product:nth-child(2) { animation-delay: 0.4s; }
+.product:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes cardReveal {
+to { opacity: 1; transform: translateY(0); }
 }
 
 .product:hover {
-transform: translateY(-12px) scale(1.02);
+transform: translateY(-15px) scale(1.02) rotateX(3deg);
 box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.product::before {
+content: "";
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+transition: 0.6s;
+}
+
+.product:hover::before {
+left: 100%;
 }
 
 .product img {
@@ -313,11 +296,6 @@ object-fit: contain;
 background: #f9f9f9;
 border-radius: 12px;
 padding: 10px;
-transition: 0.4s;
-}
-
-.product:hover img {
-transform: scale(1.08);
 }
 
 .product h3 {
@@ -340,9 +318,9 @@ border-radius: 25px;
 background: linear-gradient(45deg, #ff6a6a, #ff3d3d);
 color: white;
 cursor: pointer;
-transition: 0.3s;
 opacity: 0;
 transform: translateY(10px);
+box-shadow: 0 5px 15px rgba(255, 80, 80, 0.4);
 }
 
 .product:hover .buy-btn {
@@ -351,23 +329,18 @@ transform: translateY(0);
 }
 
 .buy-btn:hover {
-transform: scale(1.05);
+transform: scale(1.08);
+box-shadow: 0 10px 25px rgba(255, 80, 80, 0.6);
 }
 
-@media (max-width: 992px) {
-.product-grid {
-grid-template-columns: repeat(2, 1fr);
-}
+.buy-btn:active {
+transform: scale(0.95);
 }
 
-@media (max-width: 768px) {
-.product-grid {
-grid-template-columns: 1fr;
-}
-}
 .footer {
 background: linear-gradient(120deg, #ffbaba, #ffd6d6);
 padding: 50px 40px;
+animation: fadeUp 1s ease;
 }
 
 .footer-top {
@@ -390,7 +363,6 @@ margin-bottom: 12px;
 .footer-col p {
 margin: 6px 0;
 cursor: pointer;
-transition: 0.3s;
 }
 
 .footer-col p:hover {
@@ -422,20 +394,16 @@ background: linear-gradient(45deg, black, #444);
 color: white;
 font-weight: bold;
 cursor: pointer;
-transition: 0.3s;
 }
 
 .newsletter button:hover {
 transform: translateY(-3px);
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
 .product-grid {
 grid-template-columns: repeat(2, 1fr);
 }
-}
-
-@media (max-width: 992px) {
 .footer-columns {
 grid-template-columns: repeat(2, 1fr);
 }
